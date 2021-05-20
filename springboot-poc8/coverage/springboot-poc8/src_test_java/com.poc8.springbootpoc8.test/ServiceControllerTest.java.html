@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ServiceControllerTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">ServiceControllerTest (1) (May 20, 2021 4:51:15 PM)</a> &gt; <a href="../../index.html" class="el_group">springboot-poc8</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.poc8.springbootpoc8.test</a> &gt; <span class="el_source">ServiceControllerTest.java</span></div><h1>ServiceControllerTest.java</h1><pre class="source lang-java linenums">package com.poc8.springbootpoc8.test;
+import java.io.File;
+import java.io.FileInputStream;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@SpringBootTest
+@TestInstance(Lifecycle.PER_CLASS)
+<span class="fc" id="L30">public class ServiceControllerTest {</span>
+	@Autowired
+	private WebApplicationContext context;
+	
+	private MockMvc mockMvc;
+	
+<span class="fc" id="L36">	ObjectMapper objMap = new ObjectMapper();</span>
+	
+
+	@BeforeAll
+	public void setup() {
+<span class="fc" id="L41">		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();</span>
+<span class="fc" id="L42">	}</span>
+	
+	@Test
+	@WithMockUser(username = &quot;user&quot;, password = &quot;test123&quot;)
+	public void saveUserTest() throws Exception {
+		
+<span class="fc" id="L48">		File f = new File(&quot;C:\\Users\\user\\OneDrive\\Desktop\\download.jpg&quot;);</span>
+<span class="fc" id="L49">		FileInputStream fileInput1 = new FileInputStream(f);</span>
+<span class="fc" id="L50">		MockMultipartFile fstmp = new MockMultipartFile(&quot;image&quot;, f.getName(), &quot;multipart/form-data&quot;,fileInput1);</span>
+<span class="fc" id="L51">		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();</span>
+		
+<span class="fc" id="L53">		mockMvc.perform(MockMvcRequestBuilders.multipart(&quot;/saveStudent&quot;).file(fstmp)</span>
+<span class="fc" id="L54">				.param(&quot;id&quot;, &quot;20&quot;)</span>
+<span class="fc" id="L55">				.param(&quot;firstName&quot;, &quot;Karishma&quot;)</span>
+<span class="fc" id="L56">				.param(&quot;lastName&quot;,&quot;Dsouza&quot;)</span>
+<span class="fc" id="L57">				.param(&quot;contact&quot;, &quot;5274926283&quot;)</span>
+<span class="fc" id="L58">				.param(&quot;email&quot;, &quot;karisma@gmail.com&quot;)</span>
+<span class="fc" id="L59">				.contentType(MediaType.MULTIPART_FORM_DATA)).andDo(print())</span>
+<span class="fc" id="L60">		.andExpect(redirectedUrl(null));</span>
+<span class="fc" id="L61">	}</span>
+	
+	@Test
+	@WithMockUser(username = &quot;user&quot;, password = &quot;test123&quot;)
+	public void deleteStudentTest() throws Exception {
+<span class="pc" id="L66">		MvcResult result = mockMvc.perform(delete(&quot;/deleteStudent/43&quot;)</span>
+<span class="fc" id="L67">				.contentType(MediaType.APPLICATION_JSON_VALUE))</span>
+<span class="nc" id="L68">				.andExpect(redirectedUrl(null))</span>
+<span class="nc" id="L69">				.andExpect(status().isOk()).andReturn();</span>
+		
+<span class="nc" id="L71">		int response = result.getResponse().getStatus();</span>
+<span class="nc" id="L72">		assertEquals(200, response);</span>
+<span class="nc" id="L73">	}</span>
+	
+	@Test
+	@WithMockUser(username = &quot;user&quot;, password = &quot;test123&quot;)
+	public void updateStudentTest() throws Exception {
+<span class="fc" id="L78">		File f = new File(&quot;C:\\Users\\user\\OneDrive\\Desktop\\download.jpg&quot;);</span>
+<span class="fc" id="L79">		FileInputStream fileInput1 = new FileInputStream(f);</span>
+<span class="fc" id="L80">		MockMultipartFile fstmp = new MockMultipartFile(&quot;image&quot;, f.getName(), &quot;multipart/form-data&quot;,fileInput1);</span>
+<span class="fc" id="L81">		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();</span>
+		
+<span class="fc" id="L83">		mockMvc.perform(MockMvcRequestBuilders.multipart(&quot;/saveStudent&quot;).file(fstmp)</span>
+<span class="fc" id="L84">				.param(&quot;id&quot;, &quot;32&quot;)</span>
+<span class="fc" id="L85">				.param(&quot;firstName&quot;, &quot;Nupur&quot;)</span>
+<span class="fc" id="L86">				.param(&quot;lastName&quot;,&quot;Deshmukh&quot;)</span>
+<span class="fc" id="L87">				.param(&quot;contact&quot;, &quot;5274926283&quot;)</span>
+<span class="fc" id="L88">				.param(&quot;email&quot;, &quot;nupur@gmail.com&quot;)</span>
+<span class="fc" id="L89">				.contentType(MediaType.MULTIPART_FORM_DATA)).andDo(print())</span>
+<span class="fc" id="L90">		.andExpect(redirectedUrl(null));</span>
+		
+		
+<span class="fc" id="L93">	}</span>
+	
+	@Test
+	@WithMockUser(username = &quot;user&quot;, password = &quot;test123&quot;)
+	public void saveStudentProjectTest() throws Exception {
+
+<span class="fc" id="L99">		MvcResult result = mockMvc.perform(post(&quot;/student/38/saveProject&quot;)</span>
+<span class="fc" id="L100">				.param(&quot;name&quot;, &quot;JAVA&quot;)</span>
+<span class="fc" id="L101">				.contentType(MediaType.MULTIPART_FORM_DATA))</span>
+<span class="fc" id="L102">				.andDo(print())</span>
+<span class="fc" id="L103">				.andExpect(status().isOk())</span>
+<span class="fc" id="L104">				.andReturn();</span>
+		
+<span class="fc" id="L106">		int status = result.getResponse().getStatus();</span>
+<span class="fc" id="L107">		assertEquals(200, status);</span>
+<span class="fc" id="L108">	}</span>
+	
+	@Test
+	@WithMockUser(username = &quot;user&quot;, password = &quot;test123&quot;)
+	public void deleteProjectTest() throws Exception {
+<span class="pc" id="L113">		MvcResult result = mockMvc.perform(delete(&quot;/student/8/deleteProject/25&quot;)</span>
+<span class="fc" id="L114">				.contentType(MediaType.APPLICATION_JSON_VALUE))</span>
+<span class="nc" id="L115">				.andDo(print())</span>
+<span class="nc" id="L116">				.andExpect(status().isOk()).andReturn();</span>
+		
+<span class="nc" id="L118">		int response = result.getResponse().getStatus();</span>
+<span class="nc" id="L119">		assertEquals(200, response);</span>
+<span class="nc" id="L120">	}</span>
+	
+	@Test
+	@WithMockUser(username = &quot;user&quot;, password = &quot;test123&quot;)
+	public void studentSearchTest() throws Exception {
+		
+<span class="fc" id="L126">		MvcResult result = mockMvc</span>
+<span class="fc" id="L127">				.perform(get(&quot;/student/search&quot;)</span>
+<span class="fc" id="L128">				.param(&quot;keyword&quot;, &quot;1&quot;)</span>
+<span class="fc" id="L129">				.contentType(MediaType.MULTIPART_FORM_DATA))</span>
+<span class="fc" id="L130">				.andDo(print())</span>
+<span class="fc" id="L131">				.andExpect(status().isOk())</span>
+<span class="fc" id="L132">				.andReturn();</span>
+		
+<span class="fc" id="L134">		int status = result.getResponse().getStatus();</span>
+<span class="fc" id="L135">		assertEquals(200, status);</span>
+<span class="fc" id="L136">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>ServiceControllerTest (1) (May 20, 2021 4:51:15 PM)</div></body></html>

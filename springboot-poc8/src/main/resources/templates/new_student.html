@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Student Management System</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Student-Project Management System</h1>
+		<hr>
+		<h2>New Student</h2>
+
+		<form action="#" th:action="@{/saveStudent}" th:object="${student}" enctype="multipart/form-data"
+			method="POST">
+
+			<table class="table table-striped table-responsive-md">
+				<tr>
+					<th>First name:</th>
+					<td><input type="text" th:field="*{firstName}"
+						placeholder="User First Name" class="form-control mb-4 col-4"><br>
+						<h6 th:if="${#fields.hasErrors('firstName')}"
+							th:errors="*{firstName}">First Name error</h6></td>
+
+				</tr>
+
+				<tr>
+					<th>Last name:</th>
+					<td><input type="text" th:field="*{lastName}"
+						placeholder="User Last Name" class="form-control mb-4 col-4"><br>
+						<h6 th:if="${#fields.hasErrors('lastName')}"
+							th:errors="*{lastName}">Last Name error</h6></td>
+
+				</tr>
+
+				<tr>
+					<th>Contact No.:</th>
+					<td><input type="number" th:field="*{contact}"
+						placeholder="User Contact" class="form-control mb-4 col-4"><br>
+						<h6 th:if="${#fields.hasErrors('contact')}" th:errors="*{contact}">Contact
+							error</h6></td>
+
+				</tr>
+
+				<tr>
+					<th>Email:</th>
+					<td><input type="text" th:field="*{email}"
+						placeholder="User Email" class="form-control mb-4 col-4"><br>
+						<h6 th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email
+							error</h6></td>
+				</tr>
+
+				<tr>
+					<th>Upload Photo:</th>
+					<td>
+						<p th:text="${message}" th:if="${message ne null}"
+							class="alert alert-primary"></p>
+						<div class="form-group">
+							<input type="file" name="image" accept="image/png, image/jpeg, image/jpg" class="form-control-file">
+						</div>
+						
+
+					</td>
+				</tr>
+
+
+
+
+			</table>
+
+			<button type="submit" class="btn btn-info col-2">Save
+				Student</button>
+		</form>
+
+		<hr>
+
+		<a th:href="@{/}"> Back to User List</a>
+	</div>
+</body>
+
+</html>

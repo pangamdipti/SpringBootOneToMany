@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Developer</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+		<h1>Add Project</h1>
+		<hr>
+		<!-- <form th:action="@{/student/{id}/projects(id=${student.id})}"
+			method="get" enctype="multipart/form-data"> -->
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Student info</div>
+					<div class="panel-body" style="padding-left: 5px;">
+						Name: <b th:text="${student.firstName}"></b> <b
+							th:text="${student.lastName}"></b><br /> 
+						Email: <span
+							th:text="${student.email}"></span><br /> <br /> 
+							<span>
+							<table border="1" class="table table-striped table-responsive-md">
+								<thead>
+									<tr>
+										<th>Projects on:</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="project : ${projectList}">
+										<span th:if="${student.id} == ${project.student.id}">
+										<td><span th:text="${project.name}"></span></td>
+										<td><span><a th:href="@{/student/{stid}/deleteProject/{id}(stid=${student.id},id=${project.projectId})}" class="btn btn-danger btn-xs">Delete Project</a></span></td>
+										
+										</span>
+ 									</tr>
+								</tbody>
+							</table>
+						</span>
+					</div>
+				</div>
+				<hr>
+				
+				
+				<form action="#" th:action="@{/student/{id}/saveProject(id=${student.id})}" th:object="${project}" method="POST">
+				<h6>Project Name:</h6>
+				<input type="text" th:field="*{name}"
+				placeholder="Project Name" class="form-control mb-4 col-12">
+				<button type="submit" class="btn btn-info col-6">Save Project</button>
+				</form>
+				
+				
+				
+				
+				
+				
+				<!-- <div>
+					<label for="course">Choose a project</label> <select
+						class="form-control" name="projectId">
+						<option th:each="project : ${projects}"
+							th:value="${project.projectId}" th:text="${project.name}">Project</option>
+					</select>
+				</div>
+				<input type="submit" class="btn btn-success" value="Add project" /> -->
+			</div>
+<!-- 		</form> -->
+		<hr>
+
+		<a th:href="@{/}"> Back to User List</a>
+	</div>
+</body>
+</html>
